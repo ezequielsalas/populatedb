@@ -37,24 +37,24 @@ public class TestdbApplication implements CommandLineRunner {
 		int rowQuantity = Integer.parseInt(args[0]);
 		int workerQuantity = Integer.parseInt(args[1]);
 
-//		ExecutorService executor = Executors.newFixedThreadPool(workerQuantity);
-//
-//		for (int x = 0; x < workerQuantity; x++) {
-//			executor.submit(() -> {
+		ExecutorService executor = Executors.newFixedThreadPool(workerQuantity);
+
+		for (int x = 0; x < workerQuantity; x++) {
+			executor.submit(() -> {
 				log.info("Hi, I'm the worker " + Thread.currentThread().getName());
 				DataGenerator generator = new DataGenerator(rowQuantity);
 				List<Object[]> parameters = generator.generateData();
 				System.out.println("Data: "+parameters);
 				dataRepository.insertData(parameters);
 				log.info(Thread.currentThread().getName() + " says goodbye!");
-//			});
-//		}
-//
-//		executor.shutdown();
-//
-//		while (!executor.isTerminated()) {
-//
-//		}
+			});
+		}
+
+		executor.shutdown();
+
+		while (!executor.isTerminated()) {
+
+		}
 
 		log.info("End - provisioning data");
 
